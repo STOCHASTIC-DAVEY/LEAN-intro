@@ -77,9 +77,29 @@ fi
 # 4. Install VS Code extension
 echo ""
 echo "🔧 Installing Lean 4 VS Code extension..."
-code --install-extension leanprover.lean4
-echo "✅ Lean 4 VS Code extension installed"
+
+# Try multiple methods to ensure extension installation works
+if code --install-extension leanprover.lean4 --force &> /dev/null; then
+    echo "✅ Lean 4 VS Code extension installed via command line"
+elif code --install-extension leanprover.lean4 &> /dev/null; then
+    echo "✅ Lean 4 VS Code extension installed"
+else
+    echo "⚠️  Automatic installation may have failed"
+fi
+
+# Verify installation
+if code --list-extensions | grep -q "leanprover.lean4"; then
+    echo "✅ Lean 4 extension confirmed in extension list"
+else
+    echo "⚠️  Extension not found in list - manual installation may be needed"
+    echo "   Go to Extensions view (Ctrl+Shift+X) and search for 'lean4'"
+fi
 
 echo ""
 echo "🎉 Setup complete! Lean 4 with mathlib is now ready."
 echo "🔬 You can now use 'import Mathlib' in your Lean files!"
+echo ""
+echo "📋 Next steps:"
+echo "   1. If the Lean 4 extension doesn't appear active, reload VS Code (Ctrl+Shift+P -> 'Developer: Reload Window')"
+echo "   2. Open a .lean file to activate the extension"
+echo "   3. The extension should show Lean info in the bottom status bar"
