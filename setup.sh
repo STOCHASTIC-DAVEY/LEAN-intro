@@ -62,10 +62,34 @@ fi
 echo ""
 echo "📚 Getting mathlib cache..."
 if command -v lake &> /dev/null; then
+    # Create lakefile.lean if missing, with mathlib dependency
+    if [ ! -f "lakefile.lean" ]; then
+        echo "📝 No Lake config file found. Initializing Lake project with mathlib..."
+        cat > lakefile.lean <<EOF
+import Lake
+open Lake DSL
+
+package LEANintro
+
+lean_lib LEANintro
+
+require mathlib from git
+  "https://github.com/leanprover-community/mathlib4" @ "master"
+EOF
+    else
+        # Add mathlib dependency if missing
+        if ! grep -q 'require mathlib' lakefile.lean; then
+            echo "🔗 Adding mathlib dependency to lakefile.lean..."
+            echo '
+require mathlib from git
+  "https://github.com/leanprover-community/mathlib4" @ "master"
+' >> lakefile.lean
+        fi
+    fi
     echo "🔄 Updating lake..."
     lake update
     echo "📥 Downloading precompiled mathlib libraries..."
-    lake exe cache get
+    lake -R mathlib cache get
     echo "✅ Mathlib cache downloaded successfully"
 else
     echo "⚠️  Lake not found - skipping mathlib cache"
