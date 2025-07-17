@@ -5,7 +5,7 @@
 
 set -e  # Exit on any error
 
-echo "🚀 Setting up Lean 4 and mathlib in GitHub Codespaces..."
+echo "🚀 Setting up Lean 4 in GitHub Codespaces..."
 echo ""
 
 # 1. Install elan (Lean version manager)
@@ -37,44 +37,7 @@ else
     exit 1
 fi
 
-# 3. Create Lean project with mathlib
-echo ""
-echo "📚 Creating Lean project with mathlib..."
-if [ ! -f "lakefile.lean" ]; then
-    # Initialize new Lean project
-    lake init LeanProject
-    cd LeanProject
-    
-    # Add mathlib dependency
-    echo "Adding mathlib dependency..."
-    cat > lakefile.lean << 'EOF'
-import Lake
-open Lake DSL
-
-package «LeanProject» where
-  -- add package configuration options here
-
-require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git"
-
-@[default_target]
-lean_lib «LeanProject» where
-  -- add library configuration options here
-EOF
-
-    # Get mathlib cache and build
-    echo "📥 Downloading mathlib cache..."
-    lake exe cache get
-    
-    echo "🔨 Building project..."
-    lake build
-    
-    echo "✅ Lean project with mathlib created successfully"
-else
-    echo "✅ Lean project already exists"
-fi
-
-# 4. Install VS Code extension
+# 3. Install VS Code extension
 echo ""
 echo "🔧 Installing Lean 4 VS Code extension..."
 
@@ -94,12 +57,3 @@ else
     echo "⚠️  Extension not found in list - manual installation may be needed"
     echo "   Go to Extensions view (Ctrl+Shift+X) and search for 'lean4'"
 fi
-
-echo ""
-echo "🎉 Setup complete! Lean 4 with mathlib is now ready."
-echo "🔬 You can now use 'import Mathlib' in your Lean files!"
-echo ""
-echo "📋 Next steps:"
-echo "   1. If the Lean 4 extension doesn't appear active, reload VS Code (Ctrl+Shift+P -> 'Developer: Reload Window')"
-echo "   2. Open a .lean file to activate the extension"
-echo "   3. The extension should show Lean info in the bottom status bar"
