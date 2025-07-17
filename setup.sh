@@ -37,9 +37,16 @@ else
     exit 1
 fi
 
+# 3. Install VS Code extension
+echo ""
+echo "🔧 Installing Lean 4 VS Code extension..."
+code --install-extension leanprover.lean4
+echo "✅ Lean 4 VS Code extension installed"
+
 echo ""
 echo "🎉 Setup complete! Lean 4 is now installed."
 echo "   • Lean 4 with elan version manager"
+echo "   • Lean 4 VS Code extension"
 echo ""
 echo "💡 To use mathlib in a project:"
 echo "   1. Create a new directory: mkdir my-project && cd my-project"
