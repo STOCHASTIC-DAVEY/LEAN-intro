@@ -57,3 +57,16 @@ else
     echo "⚠️  Extension not found in list - manual installation may be needed"
     echo "   Go to Extensions view (Ctrl+Shift+X) and search for 'lean4'"
 fi
+
+# 4. Get mathlib cache for faster compilation
+echo ""
+echo "📚 Getting mathlib cache..."
+if command -v lake &> /dev/null; then
+    echo "🔄 Updating lake..."
+    lake update
+    echo "📥 Downloading precompiled mathlib libraries..."
+    lake exe cache get
+    echo "✅ Mathlib cache downloaded successfully"
+else
+    echo "⚠️  Lake not found - skipping mathlib cache"
+fi
